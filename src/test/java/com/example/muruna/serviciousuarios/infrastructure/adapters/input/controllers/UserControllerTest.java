@@ -37,7 +37,7 @@ class UserControllerTest {
     @BeforeEach
     void setUp() {
         userDto = new UserDto();
-        userDto.setId(UUID.randomUUID()); // if ID is of type UUID
+        userDto.setId(UUID.randomUUID());
         userDto.setName("John Doe");
         userDto.setEmail("john.doe@example.com");
         userDto.setPassword("password123");

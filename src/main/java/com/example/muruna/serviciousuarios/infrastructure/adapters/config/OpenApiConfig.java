@@ -12,7 +12,7 @@ public class OpenApiConfig {
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
                 .info(new Info()
-                        .title("Registrar Usuarios Muruna API -------")
+                        .title("Registrar Usuarios Muruna API")
                         .version("1.0.0")
                         .description("Prueba - Luis Jose Villarreal")
                         .termsOfService("http://swagger.io/terms/")
