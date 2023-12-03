@@ -60,4 +60,5 @@ Sample cURL Command:
 ]
 }'`
 
-![img.png](img.png)
+### Diagrama de Clases
+![Diagrama de Clases.png](Diagrama%20de%20Clases.png)
