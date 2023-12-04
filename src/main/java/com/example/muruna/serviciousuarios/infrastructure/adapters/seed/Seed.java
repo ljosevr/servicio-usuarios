@@ -4,16 +4,22 @@ import com.example.muruna.serviciousuarios.infrastructure.adapters.output.entiti
 import com.example.muruna.serviciousuarios.infrastructure.adapters.output.entities.User;
 import com.example.muruna.serviciousuarios.infrastructure.adapters.output.repositories.UserRepository;
 import jakarta.annotation.PostConstruct;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class Seed {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+
+    private final BCryptPasswordEncoder passwordEncoder;
 
     @PostConstruct
     private void createSeed(){
@@ -23,7 +29,7 @@ public class Seed {
             user.setCreated(new Date());
             user.setName("usuario-"+i);
             user.setEmail("email"+i+"@ejemplo.com");
-            user.setPassword("12345");
+            user.setPassword(passwordEncoder.encode(i+"12345"));
             user.setActive(true);
 
             List<Phone> phoneList = new ArrayList<>();

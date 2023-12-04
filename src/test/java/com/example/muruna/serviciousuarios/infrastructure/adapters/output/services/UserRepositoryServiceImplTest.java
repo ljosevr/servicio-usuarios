@@ -2,6 +2,7 @@ package com.example.muruna.serviciousuarios.infrastructure.adapters.output.servi
 
 import com.example.muruna.serviciousuarios.domain.model.PhoneDto;
 import com.example.muruna.serviciousuarios.domain.model.UserDto;
+import com.example.muruna.serviciousuarios.infrastructure.adapters.config.SecurityConfig;
 import com.example.muruna.serviciousuarios.infrastructure.adapters.output.entities.User;
 import com.example.muruna.serviciousuarios.infrastructure.adapters.output.repositories.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -12,6 +13,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.Arrays;
 import java.util.List;
@@ -28,6 +30,9 @@ class UserRepositoryServiceImplTest {
 
     @InjectMocks
     private UserRepositoryServiceImpl userRepositoryService;
+
+    @Mock
+    private BCryptPasswordEncoder passwordEncoder;
 
     private UserDto userDto;
     private User userEntity;
@@ -97,7 +102,6 @@ class UserRepositoryServiceImplTest {
     @Test
     void createUserTest() {
         when(userRepository.save(any(User.class))).thenReturn(userEntity);
-
         UserDto createdUser = userRepositoryService.createUser(userDto);
 
         assertNotNull(createdUser);

@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -33,6 +34,8 @@ class UserControllerTest {
 
     private UserDto userDto;
     private String validToken;
+
+    private final UUID userId = UUID.randomUUID();
 
     @BeforeEach
     void setUp() {
@@ -59,6 +62,7 @@ class UserControllerTest {
         Assertions.assertNotNull(userDto.toString());
 
         validToken = "Bearer " + JwtUtils.createJwtToken();
+
     }
 
     @Test
@@ -91,6 +95,40 @@ class UserControllerTest {
         assertNotNull(response);
         assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
         verify(userService, never()).createuser(any(UserDto.class));
+    }
+
+    @Test
+    void deleteUser_WhenAuthorized() throws UsuarioException {
+        ResponseEntity<?> response = userController.deleteUser(userId, validToken);
+
+        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
+        verify(userService, times(1)).deleteUser(userId);
+    }
+
+    @Test
+    void deleteUser_WhenUnauthorized() throws UsuarioException {
+        ResponseEntity<?> response = userController.deleteUser(userId, "Bearer invalidToken");
+
+        assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
+        verify(userService, never()).deleteUser(userId);
+    }
+
+    @Test
+    void updateUser_WhenAuthorized() throws UsuarioException {
+        when(userService.updateUser(eq(userId), any(UserDto.class))).thenReturn(userDto);
+
+        ResponseEntity<?> response = userController.updateUser(userId, userDto, validToken);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        verify(userService, times(1)).updateUser(eq(userId), any(UserDto.class));
+    }
+
+    @Test
+    void updateUser_WhenUnauthorized() throws UsuarioException {
+        ResponseEntity<?> response = userController.updateUser(userId, userDto, "Bearer invalidToken");
+
+        assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
+        verify(userService, never()).updateUser(eq(userId), any(UserDto.class));
     }
 
 }

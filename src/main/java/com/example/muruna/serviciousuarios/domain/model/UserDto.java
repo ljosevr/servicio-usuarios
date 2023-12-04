@@ -1,6 +1,7 @@
 package com.example.muruna.serviciousuarios.domain.model;
 
 import com.example.muruna.serviciousuarios.infrastructure.adapters.input.exceptions.ValidPasswordPattern;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
@@ -14,6 +15,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @ToString
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class UserDto {
     private UUID id;
 
@@ -35,7 +37,7 @@ public class UserDto {
 
     private String token;
 
-    private boolean active;
+    private Boolean active;
 
     private List<PhoneDto> phones;
 }

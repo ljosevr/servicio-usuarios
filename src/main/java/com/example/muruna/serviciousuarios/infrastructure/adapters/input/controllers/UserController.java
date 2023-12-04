@@ -5,16 +5,15 @@ import com.example.muruna.serviciousuarios.domain.model.UserDto;
 import com.example.muruna.serviciousuarios.infrastructure.adapters.input.exceptions.ErrorResponse;
 import com.example.muruna.serviciousuarios.infrastructure.adapters.input.exceptions.UsuarioException;
 import com.example.muruna.serviciousuarios.infrastructure.adapters.utils.JwtUtils;
-import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import io.swagger.v3.oas.models.annotations.OpenAPI30;
 import jakarta.annotation.PostConstruct;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,15 +21,18 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/users")
 @Tag(name ="Registrar Usuarios", description = "API para registrar Usuarios")
 @Slf4j
+@RequiredArgsConstructor
 public class UserController {
 
-    @Autowired
-    private UserService userService;
+    public static final String NO_AUTORIZADO = "No Autorizado";
+
+    private final UserService userService;
 
     @GetMapping("/")
     @Operation(summary = "Get All Users", description = "Retrieve a list of all users")
@@ -53,9 +55,39 @@ public class UserController {
             UserDto userCreatedDto = userService.createuser(newUser);
             return new ResponseEntity<>(userCreatedDto, HttpStatus.CREATED);
         } else {
-            return new ResponseEntity<>(new ErrorResponse("No Autorizado"), HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(new ErrorResponse(NO_AUTORIZADO), HttpStatus.UNAUTHORIZED);
         }
     }
+
+    @PutMapping("/{id}")
+    @Operation(summary = "Update User", description = "Update an exists user")
+    @ApiResponse(responseCode = "202", description = "User Update Successfully")
+    public ResponseEntity<?> updateUser(@PathVariable UUID id, @RequestBody UserDto userDto
+            , @RequestHeader("Authorization") String authHeader) throws UsuarioException {
+        String token = extractToken(authHeader);
+        if(JwtUtils.isJwtValid(token)) {
+            userDto.setToken(token);
+            UserDto updatedUser = userService.updateUser(id, userDto);
+            return ResponseEntity.ok(updatedUser);
+        } else {
+            return new ResponseEntity<>(new ErrorResponse(NO_AUTORIZADO), HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    @Operation(summary = "Delete User", description = "Delete an exists user")
+    @ApiResponse(responseCode = "204", description = "User Delete Successfully")
+    public ResponseEntity<?> deleteUser(@PathVariable UUID id, @RequestHeader("Authorization") String authHeader) throws UsuarioException {
+        String token = extractToken(authHeader);
+        if(JwtUtils.isJwtValid(token)) {
+            userService.deleteUser(id);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        } else {
+            return new ResponseEntity<>(new ErrorResponse(NO_AUTORIZADO), HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+
 
     private String extractToken(String authHeader) {
         if (authHeader != null && authHeader.startsWith("Bearer ")) {

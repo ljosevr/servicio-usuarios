@@ -1,5 +1,6 @@
 package com.example.muruna.serviciousuarios.infrastructure.adapters.output.entities;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -35,7 +36,10 @@ public class User {
 
     private String token;
 
-    private boolean active;
+    private Boolean active;
+
+    @JsonProperty()
+    private Boolean delete = false;
 
     @OneToMany(cascade = CascadeType.ALL)
     private List<Phone> phones;
