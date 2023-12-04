@@ -60,5 +60,29 @@ Sample cURL Command:
 ]
 }'`
 
+### Update User
+Endpoint: PUT /api/users/update/{id}
+Description: Update an user. Requiere Token.
+Nota:  para efectos de la prueba el Token se genera al levantar la aplicacion
+Sample cURL Command:
+`curl --location --request PUT 'localhost:8080/api/users/update/be82fc01-29ce-48b8-81c2-28c62e2a87df' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJNdXJ1bmEiLCJleHAiOjE3MDE3MjM4MTl9.jxQwgQdu-yC7tWk4pmFKPh83cKNqF-LCHn9WyCg92kw' \
+--header 'Cookie: JSESSIONID=67605B0113131736F8DAB9EB604FC5CA' \
+--data-raw '{
+"id": "be82fc01-29ce-48b8-81c2-28c62e2a87df",
+"name": "ljosevr",
+"email": "email1@ejemplo.com"
+}'`
+
+### Delete User
+Endpoint: DELETE /api/users/{id}
+Description: Delete an User. Requiere Token.
+Nota:  para efectos de la prueba el Token se genera al levantar la aplicacion
+Sample cURL Command:
+`curl --location --request DELETE 'localhost:8080/api/users/58fe51da-d2f9-4004-8753-f9f6aab416f8' \
+--header 'Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJNdXJ1bmEiLCJleHAiOjE3MDE3MjQwNTd9.EDP1LPC7b69FUAGnYVy0nuhG0tYApaUlIlrqq8aR6nQ' \
+--header 'Cookie: JSESSIONID=67605B0113131736F8DAB9EB604FC5CA'`
+
 ### Diagrama de Clases
 ![Diagrama de Clases.png](Diagrama%20de%20Clases.png)
