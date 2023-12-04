@@ -38,7 +38,6 @@ public class User {
 
     private Boolean active;
 
-    @JsonProperty()
     private Boolean delete = false;
 
     @OneToMany(cascade = CascadeType.ALL)

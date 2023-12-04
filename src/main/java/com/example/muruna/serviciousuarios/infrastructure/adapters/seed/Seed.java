@@ -3,6 +3,7 @@ package com.example.muruna.serviciousuarios.infrastructure.adapters.seed;
 import com.example.muruna.serviciousuarios.infrastructure.adapters.output.entities.Phone;
 import com.example.muruna.serviciousuarios.infrastructure.adapters.output.entities.User;
 import com.example.muruna.serviciousuarios.infrastructure.adapters.output.repositories.UserRepository;
+import com.example.muruna.serviciousuarios.infrastructure.adapters.utils.JwtUtils;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -30,6 +31,8 @@ public class Seed {
             user.setName("usuario-"+i);
             user.setEmail("email"+i+"@ejemplo.com");
             user.setPassword(passwordEncoder.encode(i+"12345"));
+            user.setToken(JwtUtils.createJwtToken());
+            user.setLastLogin(new Date());
             user.setActive(true);
 
             List<Phone> phoneList = new ArrayList<>();

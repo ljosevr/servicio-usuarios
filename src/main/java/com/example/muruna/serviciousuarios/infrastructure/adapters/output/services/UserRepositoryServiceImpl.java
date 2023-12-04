@@ -23,7 +23,7 @@ public class UserRepositoryServiceImpl implements UserRepositoryService {
 
     public List<UserDto> getAllUsers(){
 
-        List<User> userList = userRepository.findAll();
+        List<User> userList = userRepository.findAllByDeleteIsFalse();
 
         ObjectMapper objectMapper = new ObjectMapper();
 
@@ -78,9 +78,11 @@ public class UserRepositoryServiceImpl implements UserRepositoryService {
             user.setModified(actualDate);
             user.setName(userDto.getName());
             user.setEmail(userDto.getEmail());
-            user.setPhones(new ArrayList<>());
-            for(PhoneDto phoneDto : userDto.getPhones()) {
-                user.getPhones().add(new ObjectMapper().convertValue(phoneDto, Phone.class));
+            if(userDto.getPhones()!= null) {
+                user.setPhones(new ArrayList<>());
+                for (PhoneDto phoneDto : userDto.getPhones()) {
+                    user.getPhones().add(new ObjectMapper().convertValue(phoneDto, Phone.class));
+                }
             }
 
             user = userRepository.save(user);

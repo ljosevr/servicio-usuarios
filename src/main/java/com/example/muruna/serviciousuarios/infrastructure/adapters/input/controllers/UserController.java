@@ -59,7 +59,7 @@ public class UserController {
         }
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     @Operation(summary = "Update User", description = "Update an exists user")
     @ApiResponse(responseCode = "202", description = "User Update Successfully")
     public ResponseEntity<?> updateUser(@PathVariable UUID id, @RequestBody UserDto userDto

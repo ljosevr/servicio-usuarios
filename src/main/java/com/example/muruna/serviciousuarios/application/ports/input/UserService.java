@@ -10,6 +10,7 @@ public interface UserService {
 
     List<UserDto> getAllUsers();
 
+
     UserDto createuser(UserDto newUser) throws UsuarioException;
 
     UserDto updateUser(UUID id, UserDto userDto) throws UsuarioException;
